@@ -7,39 +7,46 @@ _MACHINE = "machine"
 _PLAYER_SYMBOL = "x"
 _MACHINE_SYMBOL = "o"
 
+
+
 class TicTacToeGame():
   def __init__(self):
     self.board = [None] * 9
     self.turn = _PLAYER
     self.is_game_over = False
     self.winner = None
+    self.count=0
+    self.tie=False
 
   def is_over(self): # TODO: Finish this function by adding checks for a winning game (rows, columns, diagonals)
-    symbol_to_check = ""
     over=False
-    board_check = self.board
-    if(self.turn == _PLAYER):
-      symbol_to_check = _PLAYER_SYMBOL
+    if(self.count!=9):
+      symbol_to_check = ""
+      board_check = self.board
+      if(self.turn == _PLAYER):
+        symbol_to_check = _MACHINE_SYMBOL
 
+      else:
+        symbol_to_check = _PLAYER_SYMBOL
+      print(symbol_to_check)
+      if board_check[0] == symbol_to_check and board_check[4] == symbol_to_check and board_check[8] == symbol_to_check:
+        over=True
+      elif board_check[0] == symbol_to_check and board_check[1] == symbol_to_check and board_check[2] == symbol_to_check:
+        over=True
+      elif board_check[0] == symbol_to_check and board_check[3] == symbol_to_check and board_check[6] == symbol_to_check:
+        over=True
+      elif board_check[1] == symbol_to_check and board_check[4] == symbol_to_check and board_check[7] == symbol_to_check:
+        over=True
+      elif board_check[2] == symbol_to_check and board_check[4] == symbol_to_check and board_check[6] == symbol_to_check:
+        over=True
+      elif board_check[2] == symbol_to_check and board_check[5] == symbol_to_check and board_check[8] == symbol_to_check:
+        over=True
+      elif board_check[3] == symbol_to_check and board_check[4] == symbol_to_check and board_check[5] == symbol_to_check:
+        over=True
+      elif board_check[6] == symbol_to_check and board_check[7] == symbol_to_check and board_check[8] == symbol_to_check:
+        over=True
     else:
-      symbol_to_check = _MACHINE_SYMBOL
-    
-    if board_check[0] == symbol_to_check and board_check[4] == symbol_to_check and board_check[8] == symbol_to_check:
-      over=True
-    elif board_check[0] == symbol_to_check and board_check[1] == symbol_to_check and board_check[2] == symbol_to_check:
-      over=True
-    elif board_check[0] == symbol_to_check and board_check[3] == symbol_to_check and board_check[6] == symbol_to_check:
-      over=True
-    elif board_check[1] == symbol_to_check and board_check[4] == symbol_to_check and board_check[7] == symbol_to_check:
-      over=True
-    elif board_check[2] == symbol_to_check and board_check[4] == symbol_to_check and board_check[6] == symbol_to_check:
-      over=True
-    elif board_check[2] == symbol_to_check and board_check[5] == symbol_to_check and board_check[8] == symbol_to_check:
-      over=True
-    elif board_check[3] == symbol_to_check and board_check[4] == symbol_to_check and board_check[5] == symbol_to_check:
-      over=True
-    elif board_check[6] == symbol_to_check and board_check[7] == symbol_to_check and board_check[8] == symbol_to_check:
-      over=True
+        self.tie=True
     return over
 
   def play(self):
@@ -67,20 +74,25 @@ class TicTacToeGame():
       print("Cell is already taken, try again")
 
       return self.player_choose_cell()
-
+    
     return player_cell
+
 
   def player_turn(self):
     chosen_cell = self.player_choose_cell()
 
     self.board[chosen_cell] = _PLAYER_SYMBOL
+    self.count+=1;
 
   def machine_turn(self): # TODO: Finish this function by making the machine choose a random cell (use random module)
     play = r.randint(0,len(self.board)-1)
+    print(play)
+    print(len(self.board))
     while self.board[play] != None:
-      play = r.randint(0,len(self.board))
+      play = r.randint(0,len(self.board)-1)
     
     self.board[play] = _MACHINE_SYMBOL
+    self.count+=1;
 
 
 
@@ -97,4 +109,10 @@ class TicTacToeGame():
     print()
 
   def print_result(self): # TODO: Finish this function in order to print the result based on the *winner*
-    print(self.turn + " Wins")
+    if self.tie:
+      print("Tie")
+    else:
+      if self.turn == _PLAYER:
+        print("Machine Wins")
+      else:
+        print("Player Wins")
